@@ -46,20 +46,81 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/satellite-streets-v9', //More here https://www.mapbox.com/api-documentation/#styles
     center: [lon, lat], // starting position
-    zoom: 10, // starting zoom
+    zoom: 6, // starting zoom
     minZoom: 5,
     maxZoom: 15,
 });
 
-function mapCenterTimer() {
-  map.flyTo({center: [lon, lat]});
+// function mapCenterTimer() {
+//   map.flyTo({center: [lon, lat]});
+// }
+//
+// map.on('load', function() {
+//   var mapCenterCoord = setInterval(mapCenterTimer, 100);
+// })
+
+
+
+
+
+// create a GeoJSON point to serve as a starting point
+var point = {
+  "type": "Point",
+  "coordinates": [lon, lat]
+};
+
+// add the GeoJSON above to a new vector tile source
+var source = new mapboxgl.GeoJSONSource({
+    data: point
+});
+
+function setPosition() {
+  point.coordinates[0] = lon;
+  point.coordinates[1] = lat;
+  source.setData(point);
+  map.setCenter(point.coordinates);
 }
 
-map.on('load', function() {
-  var mapCenterCoord = setInterval(mapCenterTimer, 100);
-})
+map.on('load', function () {
+    map.addSource('drone', source);
 
+    map.addLayer({
+        "id": "drone-glow-strong",
+        "type": "circle",
+        "source": "drone",
+        "paint": {
+            "circle-radius": 18,
+            "circle-color": "#fff",
+            "circle-opacity": 0.4
+        }
+    });
 
+    map.addLayer({
+        "id": "drone-glow",
+        "type": "circle",
+        "source": "drone",
+        "paint": {
+            "circle-radius": 40,
+            "circle-color": "#fff",
+            "circle-opacity": 0.1
+        }
+    });
+
+    map.addLayer({
+        "id": "drone",
+        "type": "symbol",
+        "source": "drone",
+
+        "layout": {
+            // "icon-image": 'drone-md.png',
+            // "icon-image" : {"sprite": "drone-md.png"},
+            "url": "drone-md.png"
+
+        }
+    });
+
+    window.setInterval(setPosition, 10);
+});
 
 
 </script>
