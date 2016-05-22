@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Satellite</title>
+    <!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" /> -->
+    <!-- <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' /> -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%;}
+    </style>
+
+</head>
+
+<body>
+<div id="map"></div>
+
+<!-- <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> -->
+<!-- <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script> -->
+<!-- <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.js'></script>
+<script>
+  var lat = 37;
+  var lon = 29;
+  function satelliteTimer() {
+    if (lat > 80 ||  lon > 150){
+      lat = 37;
+      lon = 29;
+    } else {
+      lat = lat + 0.001
+      lon = lon + 0.001
+    }
+  };
+  var satelliteCoord = setInterval(satelliteTimer, 100);
+</script>
+<script>
+// Fix mapbox token
+mapboxgl.accessToken = 'pk.eyJ1IjoiemlhLW0iLCJhIjoiQjM5aVpfTSJ9.s_U7YxQCK-Zq5SaJemH5bA';
+
+// Initialize the map
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/satellite-streets-v9', //More here https://www.mapbox.com/api-documentation/#styles
+    center: [lon, lat], // starting position
+    zoom: 10, // starting zoom
+    minZoom: 5,
+    maxZoom: 15,
+});
+
+function mapCenterTimer() {
+  map.flyTo({center: [lon, lat]});
+}
+
+map.on('load', function() {
+  var mapCenterCoord = setInterval(mapCenterTimer, 100);
+})
+
+
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
