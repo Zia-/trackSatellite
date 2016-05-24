@@ -85,39 +85,44 @@ map.on('load', function () {
     map.addSource('drone', source);
 
     map.addLayer({
-        "id": "drone-glow-strong",
-        "type": "circle",
-        "source": "drone",
-        "paint": {
-            "circle-radius": 18,
-            "circle-color": "#fff",
-            "circle-opacity": 0.4
-        }
-    });
-
-    map.addLayer({
-        "id": "drone-glow",
-        "type": "circle",
-        "source": "drone",
-        "paint": {
-            "circle-radius": 40,
-            "circle-color": "#fff",
-            "circle-opacity": 0.1
-        }
-    });
-
-    map.addLayer({
         "id": "drone",
         "type": "symbol",
         "source": "drone",
-
         "layout": {
-            // "icon-image": 'drone-md.png',
+            "icon-image": "rocket-15",
             // "icon-image" : {"sprite": "drone-md.png"},
-            "url": "drone-md.png"
+            // "url": "drone-md.png"
 
         }
+        // "image": {
+        //   "type": "image",
+        //   "url": "http://findicons.com/files/icons/2405/networking_stroke/128/satellite_128_hot.png",
+        // }
     });
+
+    // map.addLayer({
+    //     "id": "drone-glow",
+    //     "type": "circle",
+    //     "source": "drone",
+    //     "paint": {
+    //         "circle-radius": 40,
+    //         "circle-color": "#fff",
+    //         "circle-opacity": 0.1
+    //     }
+    // });
+
+    // map.addLayer({
+    //     "id": "drone",
+    //     "type": "symbol",
+    //     "source": "drone",
+    //
+    //     "layout": {
+    //         // "icon-image": 'drone-md.png',
+    //         // "icon-image" : {"sprite": "drone-md.png"},
+    //         "url": "drone-md.png"
+    //
+    //     }
+    // });
 
     window.setInterval(setPosition, 10);
 });
