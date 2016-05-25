@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
     <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%;}
@@ -51,54 +52,129 @@ var map = new mapboxgl.Map({
     maxZoom: 15,
 });
 
-// function mapCenterTimer() {
-//   map.flyTo({center: [lon, lat]});
-// }
-//
-// map.on('load', function() {
-//   var mapCenterCoord = setInterval(mapCenterTimer, 100);
-// })
-
-
-
-
-
-// create a GeoJSON point to serve as a starting point
-var point = {
+var pointRocket = {
   "type": "Point",
   "coordinates": [lon, lat]
 };
 
+// var pointCircle = {
+//   "type": "Point",
+//   "coordinates": [lon, lat]
+// };
+// var pointLeftLeftTriangle = {
+//   "type": "Point",
+//   "coordinates": [lon-0.1, lat-0.1]
+// };
+// var pointLeftTriangle = {
+//   "type": "Point",
+//   "coordinates": [lon-0.05, lat-0.05]
+// };
+// var pointRigthRightTriangle = {
+//   "type": "Point",
+//   "coordinates": [lon+0.1, lat+0.1]
+// };
+// var pointRigthTriangle = {
+//   "type": "Point",
+//   "coordinates": [lon+0.05, lat+0.05]
+// };
+
 // add the GeoJSON above to a new vector tile source
-var source = new mapboxgl.GeoJSONSource({
-    data: point
+var sourceRocket = new mapboxgl.GeoJSONSource({
+    data: pointRocket
 });
+// var sourceLeftLeftTriangle = new mapboxgl.GeoJSONSource({
+//     data: pointLeftLeftTriangle
+// });
+// var sourceLeftTriangle = new mapboxgl.GeoJSONSource({
+//     data: pointLeftTriangle
+// });
+// var sourceRigthRightTriangle = new mapboxgl.GeoJSONSource({
+//     data: pointRigthRightTriangle
+// });
+// var sourceRigthTriangle = new mapboxgl.GeoJSONSource({
+//     data: pointRigthTriangle
+// });
 
 function setPosition() {
-  point.coordinates[0] = lon;
-  point.coordinates[1] = lat;
-  source.setData(point);
-  map.setCenter(point.coordinates);
+  pointRocket.coordinates[0] = lon;
+  pointRocket.coordinates[1] = lat;
+  sourceRocket.setData(pointRocket);
+  map.setCenter(pointRocket.coordinates);
+  // pointLeftLeftTriangle.coordinates[0] = lon-0.1;
+  // pointLeftLeftTriangle.coordinates[1] = lat-0.1;
+  // sourceLeftLeftTriangle.setData(pointLeftLeftTriangle);
+  // pointLeftTriangle.coordinates[0] = lon-0.05;
+  // pointLeftTriangle.coordinates[1] = lat-0.05;
+  // sourceLeftTriangle.setData(pointLeftTriangle);
+  // pointRigthRightTriangle.coordinates[0] = lon+0.1;
+  // pointRigthRightTriangle.coordinates[1] = lat+0.1;
+  // sourceRigthRightTriangle.setData(pointRigthRightTriangle);
+  // pointRigthTriangle.coordinates[0] = lon+0.05;
+  // pointRigthTriangle.coordinates[1] = lat+0.05;
+  // sourceRigthTriangle.setData(pointRigthTriangle);
 }
 
 map.on('load', function () {
-    map.addSource('drone', source);
+    map.addSource('sourceRocket', sourceRocket);
+    // map.addSource('sourceLeftLeftTriangle', sourceLeftLeftTriangle);
+    // map.addSource('sourceLeftTriangle', sourceLeftTriangle);
+    // map.addSource('sourceRigthRightTriangle', sourceRigthRightTriangle);
+    //map.addSource('sourceRightTriangle', sourceRightTriangle);
 
+    // map.addLayer({
+    //     "id": "pointCircle",
+    //     "type": "symbol",
+    //     "source": "sourceCircle",
+    //     "layout": {
+    //         "icon-image": "triangle-11",
+    //     }
+    // });
+    //
     map.addLayer({
-        "id": "drone",
+        "id": "pointRocket",
         "type": "symbol",
-        "source": "drone",
+        "source": "sourceRocket",
+        "paint": {
+          "text-color": "#C10000",
+          "text-halo-color": "rgba(255, 255, 255, 1)",
+          "text-halo-width": 1
+        },
         "layout": {
-            "icon-image": "rocket-15",
-            // "icon-image" : {"sprite": "drone-md.png"},
-            // "url": "drone-md.png"
+          "icon-image": "rocket-15",
+          "text-field": "MODIS",
+          "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+          "text-offset": [0, -2],
+          "text-anchor": "top"
+        },
 
-        }
-        // "image": {
-        //   "type": "image",
-        //   "url": "http://findicons.com/files/icons/2405/networking_stroke/128/satellite_128_hot.png",
-        // }
     });
+    //
+    // map.addLayer({
+    //     "id": "pointLeftTriangle",
+    //     "type": "symbol",
+    //     "source": "sourceLeftTriangle",
+    //     "layout": {
+    //         "icon-image": "triangle-11",
+    //     }
+    // });
+    //
+    // map.addLayer({
+    //     "id": "pointRigthRightTriangle",
+    //     "type": "symbol",
+    //     "source": "sourceRigthRightTriangle",
+    //     "layout": {
+    //         "icon-image": "triangle-11",
+    //     }
+    // });
+    //
+    // map.addLayer({
+    //     "id": "pointRightTriangle",
+    //     "type": "symbol",
+    //     "source": "sourceRightTriangle",
+    //     "layout": {
+    //         "icon-image": "triangle-11",
+    //     }
+    // });
 
     // map.addLayer({
     //     "id": "drone-glow",
