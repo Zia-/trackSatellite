@@ -25,18 +25,29 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.js'></script>
 <script>
-  var lat = 37;
-  var lon = 29;
+  var lat = 41.103900;
+  var lon = 29.026858;
+  var rotate = 90;
+  // Turkey Bbox  35.741160, 25.224008 , 42.581538, 44.95184,
   function satelliteTimer() {
-    if (lat > 80 ||  lon > 150){
-      lat = 37;
-      lon = 29;
-    } else {
-      lat = lat + 0.001
-      lon = lon + 0.001
-    }
+    // var xIncre = 0.0001
+    // var yIncre = -0.0001
+    // if (lon < 25.224008) {xIncre = 0.0001;}
+    // if (lon > 44.95184) {xIncre = -0.0001}
+    // if (lat < 25.225008) {yIncre = 0.0001}
+    // if (lat > 44.95284) {yIncre = -0.0001}
+    // lat = lat + yIncre
+    // lon = lon + xIncre
+    // if (lat > 80 ||  lon > 150){
+    //   lat = 37;
+    //   lon = 29;
+    // } else {
+      lat = lat - 0.0001
+      lon = lon + 0.0001
+    //   rotate = rotate + 1
+    // }
   };
-  var satelliteCoord = setInterval(satelliteTimer, 100);
+  var satelliteCoord = setInterval(satelliteTimer, 10);
 </script>
 <script>
 // Fix mapbox token
@@ -47,9 +58,9 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/satellite-streets-v9', //More here https://www.mapbox.com/api-documentation/#styles
     center: [lon, lat], // starting position
-    zoom: 6, // starting zoom
-    minZoom: 5,
-    maxZoom: 15,
+    zoom: 10, // starting zoom
+    minZoom: 1,
+    maxZoom: 10,
 });
 
 var pointRocket = {
@@ -57,79 +68,21 @@ var pointRocket = {
   "coordinates": [lon, lat]
 };
 
-// var pointCircle = {
-//   "type": "Point",
-//   "coordinates": [lon, lat]
-// };
-// var pointLeftLeftTriangle = {
-//   "type": "Point",
-//   "coordinates": [lon-0.1, lat-0.1]
-// };
-// var pointLeftTriangle = {
-//   "type": "Point",
-//   "coordinates": [lon-0.05, lat-0.05]
-// };
-// var pointRigthRightTriangle = {
-//   "type": "Point",
-//   "coordinates": [lon+0.1, lat+0.1]
-// };
-// var pointRigthTriangle = {
-//   "type": "Point",
-//   "coordinates": [lon+0.05, lat+0.05]
-// };
-
 // add the GeoJSON above to a new vector tile source
 var sourceRocket = new mapboxgl.GeoJSONSource({
     data: pointRocket
 });
-// var sourceLeftLeftTriangle = new mapboxgl.GeoJSONSource({
-//     data: pointLeftLeftTriangle
-// });
-// var sourceLeftTriangle = new mapboxgl.GeoJSONSource({
-//     data: pointLeftTriangle
-// });
-// var sourceRigthRightTriangle = new mapboxgl.GeoJSONSource({
-//     data: pointRigthRightTriangle
-// });
-// var sourceRigthTriangle = new mapboxgl.GeoJSONSource({
-//     data: pointRigthTriangle
-// });
 
 function setPosition() {
   pointRocket.coordinates[0] = lon;
   pointRocket.coordinates[1] = lat;
   sourceRocket.setData(pointRocket);
   map.setCenter(pointRocket.coordinates);
-  // pointLeftLeftTriangle.coordinates[0] = lon-0.1;
-  // pointLeftLeftTriangle.coordinates[1] = lat-0.1;
-  // sourceLeftLeftTriangle.setData(pointLeftLeftTriangle);
-  // pointLeftTriangle.coordinates[0] = lon-0.05;
-  // pointLeftTriangle.coordinates[1] = lat-0.05;
-  // sourceLeftTriangle.setData(pointLeftTriangle);
-  // pointRigthRightTriangle.coordinates[0] = lon+0.1;
-  // pointRigthRightTriangle.coordinates[1] = lat+0.1;
-  // sourceRigthRightTriangle.setData(pointRigthRightTriangle);
-  // pointRigthTriangle.coordinates[0] = lon+0.05;
-  // pointRigthTriangle.coordinates[1] = lat+0.05;
-  // sourceRigthTriangle.setData(pointRigthTriangle);
+  map.setLayoutProperty('pointRocket', 'icon-rotate', rotate);
 }
 
 map.on('load', function () {
     map.addSource('sourceRocket', sourceRocket);
-    // map.addSource('sourceLeftLeftTriangle', sourceLeftLeftTriangle);
-    // map.addSource('sourceLeftTriangle', sourceLeftTriangle);
-    // map.addSource('sourceRigthRightTriangle', sourceRigthRightTriangle);
-    //map.addSource('sourceRightTriangle', sourceRightTriangle);
-
-    // map.addLayer({
-    //     "id": "pointCircle",
-    //     "type": "symbol",
-    //     "source": "sourceCircle",
-    //     "layout": {
-    //         "icon-image": "triangle-11",
-    //     }
-    // });
-    //
     map.addLayer({
         "id": "pointRocket",
         "type": "symbol",
@@ -141,6 +94,7 @@ map.on('load', function () {
         },
         "layout": {
           "icon-image": "rocket-15",
+          "icon-rotate": rotate,
           "text-field": "MODIS",
           "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
           "text-offset": [0, -2],
@@ -148,58 +102,6 @@ map.on('load', function () {
         },
 
     });
-    //
-    // map.addLayer({
-    //     "id": "pointLeftTriangle",
-    //     "type": "symbol",
-    //     "source": "sourceLeftTriangle",
-    //     "layout": {
-    //         "icon-image": "triangle-11",
-    //     }
-    // });
-    //
-    // map.addLayer({
-    //     "id": "pointRigthRightTriangle",
-    //     "type": "symbol",
-    //     "source": "sourceRigthRightTriangle",
-    //     "layout": {
-    //         "icon-image": "triangle-11",
-    //     }
-    // });
-    //
-    // map.addLayer({
-    //     "id": "pointRightTriangle",
-    //     "type": "symbol",
-    //     "source": "sourceRightTriangle",
-    //     "layout": {
-    //         "icon-image": "triangle-11",
-    //     }
-    // });
-
-    // map.addLayer({
-    //     "id": "drone-glow",
-    //     "type": "circle",
-    //     "source": "drone",
-    //     "paint": {
-    //         "circle-radius": 40,
-    //         "circle-color": "#fff",
-    //         "circle-opacity": 0.1
-    //     }
-    // });
-
-    // map.addLayer({
-    //     "id": "drone",
-    //     "type": "symbol",
-    //     "source": "drone",
-    //
-    //     "layout": {
-    //         // "icon-image": 'drone-md.png',
-    //         // "icon-image" : {"sprite": "drone-md.png"},
-    //         "url": "drone-md.png"
-    //
-    //     }
-    // });
-
     window.setInterval(setPosition, 10);
 });
 
